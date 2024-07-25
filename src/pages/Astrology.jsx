@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import BirthChartDiagram from '@/components/BirthChartDiagram';
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
@@ -120,13 +121,11 @@ const Astrology = () => {
             {showChart && (
               <div className="mt-6">
                 <h2 className="text-2xl font-semibold mb-4">Your Birth Chart</h2>
-                <img
-                  src="/placeholder.svg"
-                  alt="Birth Chart"
-                  className="mx-auto object-cover w-full h-[400px] rounded-lg"
-                />
+                <div className="rounded-lg overflow-hidden">
+                  <BirthChartDiagram />
+                </div>
                 <p className="mt-2 text-sm text-muted-foreground text-center">
-                  This is a placeholder image. In a real application, this would be a generated birth chart based on your input.
+                  This is a simplified representation of a birth chart. In a real application, this would be more detailed and based on your input.
                 </p>
               </div>
             )}
