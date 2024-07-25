@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 
 const zodiacSigns = [
   "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
@@ -32,50 +33,105 @@ const Astrology = () => {
   const [selectedSign, setSelectedSign] = useState("");
   const [name, setName] = useState("");
   const [horoscope, setHoroscope] = useState("");
+  const [birthDate, setBirthDate] = useState("");
+  const [birthTime, setBirthTime] = useState("");
+  const [birthPlace, setBirthPlace] = useState("");
+  const [showChart, setShowChart] = useState(false);
 
   const generateHoroscope = () => {
-    if (!name || !selectedSign) {
-      setHoroscope("Please enter your name and select a zodiac sign.");
+    if (!name || !selectedSign || !birthDate || !birthTime || !birthPlace) {
+      setHoroscope("Please fill in all the required fields.");
       return;
     }
     
     const personalizedHoroscope = generateRealisticHoroscope(selectedSign);
     setHoroscope(`${name}, here's your horoscope for ${selectedSign}: ${personalizedHoroscope}`);
+    setShowChart(true);
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Daily Horoscope</h1>
-      <div className="space-y-4 max-w-md">
-        <div>
-          <Label htmlFor="name">Your Name</Label>
-          <Input
-            id="name"
-            placeholder="Enter your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div>
-          <Label htmlFor="zodiac">Your Zodiac Sign</Label>
-          <Select onValueChange={setSelectedSign} value={selectedSign}>
-            <SelectTrigger id="zodiac">
-              <SelectValue placeholder="Select your zodiac sign" />
-            </SelectTrigger>
-            <SelectContent>
-              {zodiacSigns.map((sign) => (
-                <SelectItem key={sign} value={sign}>{sign}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <Button onClick={generateHoroscope}>Get Your Horoscope</Button>
-        {horoscope && (
-          <div className="mt-6 p-6 bg-secondary rounded-lg shadow-md">
-            <h2 className="text-2xl font-semibold mb-2">Your Daily Horoscope</h2>
-            <p className="text-lg leading-relaxed">{horoscope}</p>
-          </div>
-        )}
+      <h1 className="text-3xl font-bold mb-6">Daily Horoscope and Birth Chart</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Card>
+          <CardContent className="pt-6">
+            <form className="space-y-4">
+              <div>
+                <Label htmlFor="name">Your Name</Label>
+                <Input
+                  id="name"
+                  placeholder="Enter your name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="zodiac">Your Zodiac Sign</Label>
+                <Select onValueChange={setSelectedSign} value={selectedSign}>
+                  <SelectTrigger id="zodiac">
+                    <SelectValue placeholder="Select your zodiac sign" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {zodiacSigns.map((sign) => (
+                      <SelectItem key={sign} value={sign}>{sign}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label htmlFor="birthDate">Date of Birth</Label>
+                <Input
+                  id="birthDate"
+                  type="date"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="birthTime">Time of Birth</Label>
+                <Input
+                  id="birthTime"
+                  type="time"
+                  value={birthTime}
+                  onChange={(e) => setBirthTime(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="birthPlace">Place of Birth</Label>
+                <Input
+                  id="birthPlace"
+                  placeholder="Enter your place of birth"
+                  value={birthPlace}
+                  onChange={(e) => setBirthPlace(e.target.value)}
+                />
+              </div>
+              <Button onClick={generateHoroscope} type="button">Get Your Horoscope and Chart</Button>
+            </form>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="pt-6">
+            {horoscope && (
+              <div className="space-y-4">
+                <h2 className="text-2xl font-semibold">Your Daily Horoscope</h2>
+                <p className="text-lg leading-relaxed">{horoscope}</p>
+              </div>
+            )}
+            {showChart && (
+              <div className="mt-6">
+                <h2 className="text-2xl font-semibold mb-4">Your Birth Chart</h2>
+                <img
+                  src="/placeholder.svg"
+                  alt="Birth Chart"
+                  className="mx-auto object-cover w-full h-[400px] rounded-lg"
+                />
+                <p className="mt-2 text-sm text-muted-foreground text-center">
+                  This is a placeholder image. In a real application, this would be a generated birth chart based on your input.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
